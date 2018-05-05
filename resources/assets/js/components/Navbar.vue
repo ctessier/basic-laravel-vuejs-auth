@@ -10,6 +10,10 @@
                 <router-link tag="li" class="nav-item" :to="{ name: 'homepage' }" exact>
                     <a class="nav-link">Home</a>
                 </router-link>
+                <logout v-if="isAuthenticated"></logout>
+                <router-link v-else tag="li" class="nav-item" :to="{ name: 'login' }" exact>
+                    <a class="nav-link">Login</a>
+                </router-link>
             </ul>
         </div>
     </nav>
