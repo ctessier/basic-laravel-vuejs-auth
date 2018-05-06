@@ -1,3 +1,4 @@
+import router from './router';
 import store from './store';
 
 /**
@@ -11,6 +12,16 @@ const OAUTH_TOKEN_ENDPOINT = '/oauth/token';
  * user's information.
  */
 const USER_ENDPOINT = '/api/user';
+
+/**
+ * @var {array} INVALID_ACCESS_TOKEN_ERRORS The list of error messages sent by
+ * Laravel Passport when a request is made with an expired access or refresh
+ * token.
+ */
+const INVALID_TOKEN_ERRORS = [
+    'Unauthenticated.',
+    'The refresh token is invalid.',
+];
 
 /**
  * Passport Auth plugin
@@ -90,13 +101,19 @@ export default {
 
         axios.interceptors.response.use(undefined, (error) => {
             const originalRequest = error.config;
+            const isOAuthRequest = error.config.url === OAUTH_TOKEN_ENDPOINT;
 
-            if (this._isInvalidToken(error.response) && !originalRequest._retry) {
+            if (
+                !isOAuthRequest &&
+                this._isInvalidToken(error.response) &&
+                !originalRequest._retry
+            ) {
+                const { refreshToken } = store.state.auth;
                 originalRequest._retry = true;
-                this._refreshToken(store.state.auth.refresh_token, originalRequest);
+                return this._refreshToken(refreshToken, originalRequest);
             }
 
-            return Promise.reject(error.response.data.error);
+            return Promise.reject(error.response);
         });
     },
 
@@ -120,13 +137,8 @@ export default {
      * @return {boolean}
      */
     _isInvalidToken (response) {
-        const { data, status } = response;
-        const error = data.error;
-
-        return (
-            status === 401 &&
-            (error === 'invalid_token' || error === 'expired_token')
-        );
+        const { status, data } = response;
+        return status === 401 && INVALID_TOKEN_ERRORS.includes(data.message);
     },
 
     /**
@@ -161,13 +173,13 @@ export default {
      * @return {void}
      */
     _retry (request) {
-        this._setAuthHeader(request, store.state.auth.access_token);
-        axios(request)
+        this._setAuthHeader(request, store.state.auth.accessToken);
+        return axios(request)
             .then((response) => {
                 return response;
             })
-            .catch((response) => {
-                return response;
+            .catch((error) => {
+                return error;
             });
     },
 
@@ -258,6 +270,7 @@ export default {
     logout () {
         return new Promise((resolve, reject) => {
             store.commit('logout');
+            router.push({ path: '/' });
             resolve();
         });
     },
