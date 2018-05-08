@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-12">
             <h1>Login</h1>
-            <message v-if="error" type="danger" :message="error" />
+            <message v-if="error" type="danger">{{ error }}</message>
             <form @submit.prevent="submit">
                 <div class="form-group">
                     <label for="email-field">Email address</label>
@@ -19,10 +19,9 @@
 </template>
 
 <script>
-import Message from './Message.vue';
+import Message from '@/components/Message.vue';
 
 export default {
-    name: 'login',
     components: { Message },
     data() {
         return {
@@ -37,7 +36,7 @@ export default {
             this.$auth.login(this.email, this.password).then(() => {
                 this.$router.push({ name: 'homepage' });
             }).catch((error) => {
-                this.error = error;
+                this.error = error.data.message;
             });
         },
     }

@@ -14,16 +14,17 @@ require('./bootstrap');
  */
 
 import Vue from 'vue';
-import store from './store';
-import PassportAuth from './passport-auth';
+import store from '@/store';
+import PassportAuth from '@/passport-auth';
 
 Vue.use(PassportAuth, {
     client_id: 2,
     client_secret: 'P7YHlZ4Q9yC74KaKewniNuSNK3NJBVsPzPO7UvEH',
 });
 
-import App from './App.vue';
-import router from './router';
+
+import App from '@/App.vue';
+import router from '@/router';
 
 const app = new Vue({
     el: '#app',
