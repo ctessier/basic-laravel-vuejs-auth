@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
+import contactRoutes from './contact-routes';
 import { isUserAuthenticated, getCurrentUser } from '@/utils/auth';
 
 Vue.use(VueRouter);
@@ -14,6 +15,7 @@ const router = new VueRouter({
             name: 'homepage',
             component: require('@/pages/HomePage.vue'),
         },
+        contactRoutes,
         {
             path: '/login',
             name: 'login',
