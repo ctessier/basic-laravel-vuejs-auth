@@ -16,12 +16,14 @@ require('./bootstrap');
 import Vue from 'vue';
 import store from '@/store';
 import PassportAuth from '@/passport-auth';
+import { diffForHuman } from '@/utils/date';
 
 Vue.use(PassportAuth, {
     client_id: 2,
     client_secret: 'P7YHlZ4Q9yC74KaKewniNuSNK3NJBVsPzPO7UvEH',
 });
 
+Vue.filter('diffForHuman', diffForHuman);
 
 import App from '@/App.vue';
 import router from '@/router';
