@@ -25,6 +25,7 @@ export default {
             Object.keys(newState).forEach(key => {
                 state[key] = newState[key];
             });
+            // TODO: reinit user state
         },
     },
 }

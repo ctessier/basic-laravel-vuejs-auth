@@ -1,3 +1,5 @@
+import userService from '@/services/userService';
+
 const initState = {
     name: null,
     email: null,
@@ -9,11 +11,12 @@ export default {
     state: initState,
     actions: {
         fetch ({ dispatch }) {
-            axios.get('/api/user')
+            userService.get()
                 .then((response) => {
                     dispatch('receive', response.data);
                 })
                 .catch((error) => {
+                    // TODO: handle error
                     console.log(error);
                 });
         },
