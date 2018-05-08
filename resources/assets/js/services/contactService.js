@@ -5,4 +5,12 @@ module.exports = {
         return axios.get(`${baseUrl}`);
     },
 
+    get(id) {
+        return axios.get(`${baseUrl}/${id}`);
+    },
+
+    delete(id) {
+        return axios.delete(`${baseUrl}/${id}`);
+    },
+
 };
