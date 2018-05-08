@@ -1,6 +1,7 @@
 const initState = {
     name: null,
     email: null,
+    imageUrl: null,
 }
 
 export default {
@@ -10,11 +11,10 @@ export default {
         fetch ({ dispatch }) {
             axios.get('/api/user')
                 .then((response) => {
-                    const { name, email } = response.data;
-                    dispatch('receive', { name, email });
+                    dispatch('receive', response.data);
                 })
                 .catch((error) => {
-
+                    console.log(error);
                 });
         },
         receive ({ commit }, user) {
@@ -22,9 +22,10 @@ export default {
         },
     },
     mutations: {
-        set (state, { name, email }) {
+        set (state, { name, email, image_url }) {
             state.name = name;
             state.email = email;
+            state.imageUrl = image_url;
         },
     },
 }

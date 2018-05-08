@@ -15,5 +15,5 @@ export const isUserAuthenticated = () => {
  * @return {object}
  */
 export const getCurrentUser = () => {
-    return store.state.user;
+    return isUserAuthenticated() ? store.state.user : null;
 }

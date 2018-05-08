@@ -1,8 +1,8 @@
 <template>
     <div class="app">
-        <Navbar :isAuthenticated="isAuthenticated" />
+        <Navbar :isAuthenticated="isAuthenticated" :currentUser="currentUser" />
         <div class="container mt-4">
-            <router-view />
+            <router-view :isAuthenticated="isAuthenticated" :currentUser="currentUser" />
         </div>
     </div>
 </template>
@@ -10,16 +10,15 @@
 <script>
 import store from './store';
 import Navbar from './components/Navbar.vue';
-import { isUserAuthenticated } from './utils/auth';
+import { isUserAuthenticated, getCurrentUser } from './utils/auth';
 
 export default {
-    components: { Navbar },
+    components: { Navbar },
     computed: {
-        isAuthenticated () {
-            return isUserAuthenticated();
-        },
+        isAuthenticated: () => isUserAuthenticated(),
+        currentUser: () => getCurrentUser(),
     },
-    beforeMount() {
+    created() {
         if (this.isAuthenticated) {
             store.dispatch('user/fetch');
         }

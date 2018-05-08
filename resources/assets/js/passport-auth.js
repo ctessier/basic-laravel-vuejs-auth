@@ -161,8 +161,7 @@ export default {
      * @return {void}
      */
     _storeUser (responseData) {
-        const { name, email } = responseData;
-        store.dispatch('user/receive', { name, email });
+        store.dispatch('user/receive', responseData);
     },
 
     /**
@@ -256,9 +255,7 @@ export default {
                 this._storeUser(response.data);
             })
             .catch((error) => {
-                // TODO: find out why error is undefined when second ajax call
-                // fails.
-                throw error || 'unkown_error';
+                throw error;
             });
     },
 
